@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@todo-list-examination/services": ["libs/services/src/index.ts"],
+      "@todo-list-examination/utilities": ["libs/utilities/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
