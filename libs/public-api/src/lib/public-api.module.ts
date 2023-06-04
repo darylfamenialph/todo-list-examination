@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { ServicesModule } from '@todo-list-examination/services';
+import { TodoFacadeController } from './todo';
 import { UserFacadeController } from './user';
 
 @Module({
@@ -15,7 +16,7 @@ import { UserFacadeController } from './user';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UserFacadeController],
+  controllers: [UserFacadeController, TodoFacadeController],
   providers: [],
   exports: [],
 })

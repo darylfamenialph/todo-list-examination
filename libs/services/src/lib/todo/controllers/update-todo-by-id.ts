@@ -1,12 +1,13 @@
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { ToDoDocument } from '../schema';
+import { ObjectId } from 'mongodb';
 
 export interface UpdateToDoByIdServiceInput {
   id: ObjectId;
   title: string;
   description: string;
   status: string;
-  createdBy: ObjectId;
+  userId: ObjectId;
 }
 
 interface input extends UpdateToDoByIdServiceInput {
@@ -18,7 +19,7 @@ export const updateToDoByIdService = async ({
   title,
   description,
   status,
-  createdBy,
+  userId,
   todoDocumentModel,
 }: input) => {
   try {
@@ -36,13 +37,9 @@ export const updateToDoByIdService = async ({
       setQuery.status = status;
     }
 
-    if (createdBy) {
-      setQuery.createdBy = createdBy;
-    }
-
     return todoDocumentModel
       .updateOne(
-        { _id: id },
+        { _id: id, createdBy: userId },
         {
           $set: setQuery,
         }
