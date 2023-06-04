@@ -1,0 +1,64 @@
+{
+  "name": "todo-list-examination",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/todo-list-examination/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/todo-list-examination",
+        "main": "apps/todo-list-examination/src/main.ts",
+        "tsConfig": "apps/todo-list-examination/tsconfig.app.json",
+        "assets": ["apps/todo-list-examination/src/assets"],
+        "isolatedConfig": true,
+        "webpackConfig": "apps/todo-list-examination/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "todo-list-examination:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "todo-list-examination:build:development"
+        },
+        "production": {
+          "buildTarget": "todo-list-examination:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/todo-list-examination/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/todo-list-examination/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    }
+  },
+  "tags": []
+}
