@@ -2,10 +2,15 @@
   "name": "@todo-list-examination/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev:todo": "nx serve todo-list-examination",
+    "build:todo": "nx build todo-list-examination",
+    "prod-start:todo": "node dist/todo-list-examination/main.js"
+  },
   "private": true,
   "dependencies": {
     "@nestjs/common": "^9.1.1",
+    "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.1.1",
     "@nestjs/jwt": "^10.0.3",
     "@nestjs/mongoose": "^9.2.2",

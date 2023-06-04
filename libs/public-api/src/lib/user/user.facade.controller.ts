@@ -1,4 +1,11 @@
-import { Body, Controller, Post, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserFacadeService } from '@todo-list-examination/services';
 import { ApiResponseInterceptor } from '@todo-list-examination/interceptors';
 import {
@@ -11,6 +18,7 @@ import {
   hashString,
 } from '@todo-list-examination/utilities';
 import { JwtService } from '@nestjs/jwt';
+import { BearerAuthGuard } from '@todo-list-examination/guards';
 
 @Controller('user')
 export class UserFacadeController {
@@ -58,40 +66,51 @@ export class UserFacadeController {
     @Body('username') username: string,
     @Body('password') password: string
   ) {
-    try {
-      if (!(username && password)) {
-        throw new InvalidRequestPayloadException({
-          erorrCode: 'Missing Information',
-          errorDescription: 'username and/or password are required',
-        });
-      }
-
-      const result = await this._userFacadeService.getUserByUsername({
-        username,
+    // try {
+    if (!(username && password)) {
+      throw new InvalidRequestPayloadException({
+        erorrCode: 'Missing Information',
+        errorDescription: 'username and/or password are required',
       });
-
-      if (!result) {
-        throw new UnAuthorizedAccessException({
-          erorrCode: 'Invalid Credentials',
-          errorDescription: 'username not found',
-        });
-      }
-
-      if (!(await compareHashString(password, result.password))) {
-        throw new UnAuthorizedAccessException({
-          erorrCode: 'Invalid Credentials',
-          errorDescription: 'password is incorrect',
-        });
-      }
-
-      const payload = { userId: result._id, username };
-      const token = await this._jwtService.signAsync(payload);
-      return {
-        type: 'Bearer',
-        access_token: token,
-      };
-    } catch (err) {
-      throw new InternalServerErrorException();
     }
+
+    const result = await this._userFacadeService.getUserByUsername({
+      username,
+    });
+
+    if (!result) {
+      throw new UnAuthorizedAccessException({
+        erorrCode: 'Invalid Credentials',
+        errorDescription: 'username not found',
+      });
+    }
+
+    if (!(await compareHashString(password, result.password))) {
+      throw new UnAuthorizedAccessException({
+        erorrCode: 'Invalid Credentials',
+        errorDescription: 'password is incorrect',
+      });
+    }
+
+    const payload = { userId: result._id, username };
+    const token = await this._jwtService.signAsync(payload);
+
+    return {
+      type: 'Bearer',
+      access_token: token,
+    };
+    // } catch (err) {
+    //   throw new InternalServerErrorException();
+    // }
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Get('/get-all-users')
+  async getUsers() {
+    const result = await this._userFacadeService.getAllUsers();
+
+    return {
+      data: result,
+    };
   }
 }

@@ -15,7 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@todo-list-examination/enums": ["libs/enums/src/index.ts"],
       "@todo-list-examination/exceptions": ["libs/exceptions/src/index.ts"],
+      "@todo-list-examination/guards": ["libs/guards/src/index.ts"],
       "@todo-list-examination/interceptors": ["libs/interceptors/src/index.ts"],
       "@todo-list-examination/public-api": ["libs/public-api/src/index.ts"],
       "@todo-list-examination/services": ["libs/services/src/index.ts"],
