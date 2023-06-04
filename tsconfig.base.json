@@ -15,6 +15,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@todo-list-examination/exceptions": ["libs/exceptions/src/index.ts"],
+      "@todo-list-examination/interceptors": ["libs/interceptors/src/index.ts"],
+      "@todo-list-examination/public-api": ["libs/public-api/src/index.ts"],
       "@todo-list-examination/services": ["libs/services/src/index.ts"],
       "@todo-list-examination/utilities": ["libs/utilities/src/index.ts"]
     }
