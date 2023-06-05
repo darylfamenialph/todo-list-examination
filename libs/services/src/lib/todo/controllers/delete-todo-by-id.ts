@@ -1,5 +1,6 @@
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { ToDoDocument } from '../schema';
+import { ObjectId } from 'mongodb';
 
 export interface DeleteToDoByIdServiceInput {
   id: ObjectId;

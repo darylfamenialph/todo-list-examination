@@ -1,24 +1,22 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { ObjectId } from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { ObjectId, Types } from 'mongoose';
 
 export type ToDoDocument = ToDo & Document;
 @Schema({ timestamps: true })
 export class ToDo {
+  _id!: ObjectId;
 
-    _id: ObjectId;
+  @Prop({ required: true })
+  title!: string;
 
-    @Prop({ required: true })
-    title: string;
+  @Prop({ required: false })
+  description?: string;
 
-    @Prop({ required: false })
-    description: string;
+  @Prop({ required: true })
+  status!: string;
 
-    @Prop({ required: true })
-    status: string;
-
-    @Prop({ required: true })
-    createdBy: ObjectId;
-
+  @Prop({ required: true, type: Types.ObjectId })
+  createdBy!: ObjectId;
 }
 
 export const ToDoSchema = SchemaFactory.createForClass(ToDo);
