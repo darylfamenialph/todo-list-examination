@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -10,12 +11,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ToDoFacadeService } from '@todo-list-examination/services';
-import { Request as request } from 'express';
 import { BearerAuthGuard } from '@todo-list-examination/guards';
 import { ApiResponseInterceptor } from '@todo-list-examination/interceptors';
 import { InvalidRequestPayloadException } from '@todo-list-examination/exceptions';
-import { convertStringToObjectId } from '../../../../utilities/src';
-import mongoose from 'mongoose';
+import { convertStringToObjectId } from '@todo-list-examination/utilities';
 
 @Controller('todo')
 export class TodoFacadeController {
@@ -67,6 +66,24 @@ export class TodoFacadeController {
   }
 
   @UseGuards(BearerAuthGuard)
+  @UseInterceptors(ApiResponseInterceptor)
+  @Get('/get-by-id')
+  async getTodoListById(@Query('id') id: string) {
+    if (!id) {
+      throw new InvalidRequestPayloadException({
+        erorrCode: 'Missing Information',
+        errorDescription: 'id is required',
+      });
+    }
+
+    const result: any = await this._toDoFacadeService.getToDoById({
+      id: convertStringToObjectId(id),
+    });
+
+    return { data: result['_doc'] };
+  }
+
+  @UseGuards(BearerAuthGuard)
   @Put('/update-by-id')
   async updateToDoById(
     @Request() req: any,
@@ -94,6 +111,27 @@ export class TodoFacadeController {
       return { message: 'Update Successful' };
     } else {
       return { message: 'Update Failed' };
+    }
+  }
+
+  @UseGuards(BearerAuthGuard)
+  @Delete('/delete-by-id')
+  async deleteById(@Query('id') id: string) {
+    if (!id) {
+      throw new InvalidRequestPayloadException({
+        erorrCode: 'Missing Information',
+        errorDescription: 'id is required',
+      });
+    }
+
+    const result = await this._toDoFacadeService.deleteToDoById({
+      id: convertStringToObjectId(id),
+    });
+
+    if (result.acknowledged && result.deletedCount > 0) {
+      return { message: 'Delete Successful' };
+    } else {
+      return { message: 'Delete Failed' };
     }
   }
 }
