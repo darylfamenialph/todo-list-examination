@@ -5,7 +5,8 @@
   "scripts": {
     "dev:todo": "nx serve todo-list-examination",
     "build:todo": "nx build todo-list-examination",
-    "prod-start:todo": "node dist/todo-list-examination/main.js"
+    "prod-start:todo": "node dist/todo-list-examination/main.js",
+    "test:public-api": "nx test public-api"
   },
   "private": true,
   "dependencies": {

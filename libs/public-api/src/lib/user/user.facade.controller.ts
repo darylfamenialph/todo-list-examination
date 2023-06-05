@@ -35,29 +35,25 @@ export class UserFacadeController {
     @Body('firstName') firstName: string,
     @Body('lastName') lastName: string
   ) {
-    try {
-      if (!(username && password && firstName && lastName)) {
-        throw new InvalidRequestPayloadException({
-          erorrCode: 'Missing Information',
-          errorDescription:
-            'username, password, firstName and/or lastName are required',
-        });
-      }
-
-      const result = await this._userFacadeService.addUser({
-        username,
-        password: await hashString(password),
-        firstName,
-        lastName,
-        status: 'active',
+    if (!(username && password && firstName && lastName)) {
+      throw new InvalidRequestPayloadException({
+        erorrCode: 'Missing Information',
+        errorDescription:
+          'username, password, firstName and/or lastName are required',
       });
-
-      return {
-        details: { message: 'User Successfully Created', data: result },
-      };
-    } catch (err) {
-      throw new InternalServerErrorException();
     }
+
+    const result = await this._userFacadeService.addUser({
+      username,
+      password: await hashString(password),
+      firstName,
+      lastName,
+      status: 'active',
+    });
+
+    return {
+      details: { message: 'User Successfully Created', data: result },
+    };
   }
 
   @UseInterceptors(ApiResponseInterceptor)
@@ -66,7 +62,6 @@ export class UserFacadeController {
     @Body('username') username: string,
     @Body('password') password: string
   ) {
-    // try {
     if (!(username && password)) {
       throw new InvalidRequestPayloadException({
         erorrCode: 'Missing Information',
@@ -99,9 +94,6 @@ export class UserFacadeController {
       type: 'Bearer',
       access_token: token,
     };
-    // } catch (err) {
-    //   throw new InternalServerErrorException();
-    // }
   }
 
   @UseGuards(BearerAuthGuard)

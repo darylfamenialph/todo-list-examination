@@ -61,7 +61,7 @@ export class TodoFacadeController {
     });
 
     return {
-      details: { message: 'Todo Successfully Created', data: result },
+      data: result,
     };
   }
 
@@ -80,7 +80,7 @@ export class TodoFacadeController {
       id: convertStringToObjectId(id),
     });
 
-    return { data: result['_doc'] };
+    return { data: result ? result['_doc'] : {} };
   }
 
   @UseGuards(BearerAuthGuard)
@@ -107,7 +107,7 @@ export class TodoFacadeController {
       status,
     });
 
-    if (result.acknowledged && result.matchedCount > 0) {
+    if (result?.acknowledged && result?.matchedCount > 0) {
       return { message: 'Update Successful' };
     } else {
       return { message: 'Update Failed' };
